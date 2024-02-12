@@ -11,10 +11,46 @@ datasource db {
 }
 
 model User {
+  id             String      @id @default(cuid())
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  username       String
+  email          String
+  password       String
+  breakCount     Int
+  workCount      Int
+  intervalBreaks Int
+  Task           Task[]
+  TaskTimer      TaskTimer[]
+}
+
+model Task {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  name              String
+  isImportant       Boolean
+  isCompleted       Boolean
+  imporatntPriority String // TODO: Later enum
+  User              User     @relation(fields: [userId], references: [id])
+  userId            String
+}
+
+model TaskBlock {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  username  String
-  email     String
-  password  String
+  name      String
+  color     String?
+  duration  Int
+  order     Int      @default(1)
+}
+
+model TaskTimer {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDone    Boolean?
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
