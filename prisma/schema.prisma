@@ -22,6 +22,7 @@ model User {
   intervalBreaks Int
   Task           Task[]
   TaskTimer      TaskTimer[]
+  TaskBlock      TaskBlock[]
 }
 
 model Task {
@@ -44,13 +45,26 @@ model TaskBlock {
   color     String?
   duration  Int
   order     Int      @default(1)
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model TaskTimer {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
   isDone    Boolean?
-  User      User     @relation(fields: [userId], references: [id])
+  User      User        @relation(fields: [userId], references: [id])
   userId    String
+  TaskRound TaskRound[]
+}
+
+model TaskRound {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  totalSec    Int
+  isDone      Boolean?
+  taskTimerId String
+  taskTimer   TaskTimer @relation(fields: [taskTimerId], references: [id], onDelete: Cascade)
 }
