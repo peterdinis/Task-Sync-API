@@ -1,89 +1,107 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import {verify} from "argon2";
-import {Response} from "express";
+import { verify } from 'argon2';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
     constructor(
         private jwt: JwtService,
-        private userService: UsersService
+        private userService: UsersService,
     ) {}
 
     async register(registerDto: RegisterDto) {
-        const checkIfUserExists = await this.userService.findOneByEmail(registerDto.email);
-        if(checkIfUserExists) throw new BadRequestException("User already exists");
+        const checkIfUserExists = await this.userService.findOneByEmail(
+            registerDto.email,
+        );
+        if (checkIfUserExists)
+            throw new BadRequestException('User already exists');
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const {password, ...user} = await this.userService.createUser(registerDto);
+        const { password, ...user } =
+            await this.userService.createUser(registerDto);
 
         const tokens = this.issueTokens(user.id);
         return {
             user,
-            ...tokens
-        }
+            ...tokens,
+        };
     }
 
     async login(loginDto: LoginDto) {
-        const {password, ...user} = await this.validateUser(loginDto);
+        const { password, ...user } = await this.validateUser(loginDto);
         const tokens = this.issueTokens(user.id);
         return {
             user,
-            ...tokens
-        }
+            ...tokens,
+        };
     }
 
     private issueTokens(userId: string) {
-        const data = {id: userId};
+        const data = { id: userId };
         const accessToken = this.jwt.sign(data, {
-            expiresIn: "1h",
-        })
+            expiresIn: '1h',
+        });
 
         const refreshToken = this.jwt.sign(data, {
-            expiresIn: "7d",
+            expiresIn: '7d',
         });
 
         return {
             accessToken,
-            refreshToken
-        }
+            refreshToken,
+        };
     }
 
     private async validateUser(dto: RegisterDto) {
         const user = await this.userService.findOneByEmail(dto.email);
         const isValid = await verify(user.password, dto.password);
 
-        if(!isValid) throw new UnauthorizedException("Invalid password");
+        if (!isValid) throw new UnauthorizedException('Invalid password');
 
         return user;
     }
 
     refreshTokenAddToResponse(res: Response, refreshToken: string) {
         const expiresIn = new Date();
-        expiresIn.setDate(expiresIn.getDate() + process.env.EXPIRE_DAY_REFRESH_TOKEN as unknown as number);
+        expiresIn.setDate(
+            (expiresIn.getDate() +
+                process.env.EXPIRE_DAY_REFRESH_TOKEN) as unknown as number,
+        );
 
-        res.cookie(process.env.REFRESH_TOKEN_NAME as unknown as string, refreshToken, {
-            httpOnly: true,
-            expires: expiresIn,
-            secure: false, // true in production
-            domain: "localhost",
-            sameSite: "none"
-        })
+        res.cookie(
+            process.env.REFRESH_TOKEN_NAME as unknown as string,
+            refreshToken,
+            {
+                httpOnly: true,
+                expires: expiresIn,
+                secure: false, // true in production
+                domain: 'localhost',
+                sameSite: 'none',
+            },
+        );
     }
 
     refreshTokenRemoveToResponse(res: Response) {
         const expiresIn = new Date();
-        expiresIn.setDate(expiresIn.getDate() + process.env.EXPIRE_DAY_REFRESH_TOKEN as unknown as number);
+        expiresIn.setDate(
+            (expiresIn.getDate() +
+                process.env.EXPIRE_DAY_REFRESH_TOKEN) as unknown as number,
+        );
 
-        res.cookie(process.env.REFRESH_TOKEN_NAME as unknown as string,'', {
+        res.cookie(process.env.REFRESH_TOKEN_NAME as unknown as string, '', {
             httpOnly: true,
             expires: new Date(0),
             secure: false, // true in production
-            domain: "localhost",
-            sameSite: "none"
-        })
+            domain: 'localhost',
+            sameSite: 'none',
+        });
     }
 }

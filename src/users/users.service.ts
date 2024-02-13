@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -9,12 +13,12 @@ export class UsersService {
     async createUser(registerDto: RegisterDto) {
         const newUser = await this.prismaService.user.create({
             data: {
-                ...registerDto
-            }
-        })
+                ...registerDto,
+            },
+        });
 
-        if(!newUser) {
-            throw new BadRequestException("Failed to create user");
+        if (!newUser) {
+            throw new BadRequestException('Failed to create user');
         }
 
         return newUser;
@@ -48,7 +52,9 @@ export class UsersService {
         });
 
         if (!findUserByEmail) {
-            throw new NotFoundException('Requested user with this email does not exists');
+            throw new NotFoundException(
+                'Requested user with this email does not exists',
+            );
         }
 
         return findUserByEmail;
