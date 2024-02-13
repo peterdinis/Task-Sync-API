@@ -12,8 +12,4 @@ export class AuthService {
     ) {}
 
     async login(loginDto: LoginDto) {}
-
-    async register(registerDto: RegisterDto) {
-        
-    }
 }
