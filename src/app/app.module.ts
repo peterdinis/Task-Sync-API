@@ -15,7 +15,7 @@ import { TaskModule } from 'src/task/task.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        TaskModule
+        TaskModule,
     ],
     controllers: [AppController],
     providers: [AppService],
