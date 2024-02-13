@@ -8,7 +8,12 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -24,7 +29,7 @@ export class AuthController {
     })
     @ApiCreatedResponse({
         status: 201,
-        type: LoginDto
+        type: LoginDto,
     })
     @UsePipes(new ValidationPipe())
     @Post('/login')
@@ -43,7 +48,7 @@ export class AuthController {
     })
     @ApiCreatedResponse({
         status: 201,
-        type: RegisterDto
+        type: RegisterDto,
     })
     @UsePipes(new ValidationPipe())
     @Post('/register')
@@ -58,32 +63,37 @@ export class AuthController {
     }
 
     @ApiOperation({
-        summary: "New access token"
+        summary: 'New access token',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Post("/access-token/new")
-    async getNewAccessToken(@Req() req: Request, @Res({passthrough: true}) res: Response) {
-        const refreshTokenFromCookies = req.cookies[process.env.REFRESH_TOKEN_NAME];
-        if(!refreshTokenFromCookies) {
+    @Post('/access-token/new')
+    async getNewAccessToken(
+        @Req() req: Request,
+        @Res({ passthrough: true }) res: Response,
+    ) {
+        const refreshTokenFromCookies =
+            req.cookies[process.env.REFRESH_TOKEN_NAME];
+        if (!refreshTokenFromCookies) {
             this.authService.refreshTokenRemoveToResponse(res);
-            throw new UnauthorizedException("Refresh token not passed");
+            throw new UnauthorizedException('Refresh token not passed');
         }
 
-        const {refreshToken, ...response} = await this.authService.getNewToken(refreshTokenFromCookies);
+        const { refreshToken, ...response } =
+            await this.authService.getNewTokens(refreshTokenFromCookies);
         this.authService.refreshTokenAddToResponse(res, refreshToken);
         return response;
     }
 
     @ApiOperation({
-        summary: "Logout user"
+        summary: 'Logout user',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Post("/logout")
-    async logoutUser(@Res({passthrough: true}) res: Response) {
+    @Post('/logout')
+    async logoutUser(@Res({ passthrough: true }) res: Response) {
         this.authService.refreshTokenRemoveToResponse(res);
         return true;
     }

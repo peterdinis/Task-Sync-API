@@ -35,6 +35,20 @@ export class AuthService {
         };
     }
 
+    async getNewTokens(refreshToken: string) {
+        const result = await this.jwt.verifyAsync(refreshToken);
+        if (!result) throw new UnauthorizedException('Invalid refresh token');
+
+        const { password, ...user } = await this.userService.findOne(result.id);
+
+        const tokens = this.issueTokens(user.id);
+
+        return {
+            user,
+            ...tokens,
+        };
+    }
+
     async login(loginDto: LoginDto) {
         const { password, ...user } = await this.validateUser(loginDto);
         const tokens = this.issueTokens(user.id);
