@@ -32,4 +32,6 @@ export class AuthController {
     async registerUser(@Body() registerDto: RegisterDto) {
         return this.authService.login(registerDto);
     }
+
+    
 }

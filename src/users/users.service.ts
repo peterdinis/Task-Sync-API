@@ -1,10 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
     constructor(private readonly prismaService: PrismaService) {}
+
+    async createUser(registerDto: RegisterDto) {
+        const newUser = await this.prismaService.user.create({
+            data: {
+                ...registerDto
+            }
+        })
+
+        if(!newUser) {
+            throw new BadRequestException("Failed to create user");
+        }
+
+        return newUser;
+    }
 
     async findOne(id: string) {
         const findOneUser = await this.prismaService.user.findUnique({

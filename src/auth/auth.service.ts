@@ -3,7 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import {verify} from "argon2"
+import {verify} from "argon2";
+import {Response} from "express";
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
         const checkIfUserExists = await this.userService.findOneByEmail(registerDto.email);
         if(checkIfUserExists) throw new BadRequestException("User already exists");
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {password, ...user} = await this.userService.createUser(registerDto);
 
         const tokens = this.issueTokens(user.id);
@@ -57,5 +59,31 @@ export class AuthService {
         if(!isValid) throw new UnauthorizedException("Invalid password");
 
         return user;
+    }
+
+    refreshTokenAddToResponse(res: Response, refreshToken: string) {
+        const expiresIn = new Date();
+        expiresIn.setDate(expiresIn.getDate() + process.env.EXPIRE_DAY_REFRESH_TOKEN as unknown as number);
+
+        res.cookie(process.env.REFRESH_TOKEN_NAME as unknown as string, refreshToken, {
+            httpOnly: true,
+            expires: expiresIn,
+            secure: false, // true in production
+            domain: "localhost",
+            sameSite: "none"
+        })
+    }
+
+    refreshTokenRemoveToResponse(res: Response) {
+        const expiresIn = new Date();
+        expiresIn.setDate(expiresIn.getDate() + process.env.EXPIRE_DAY_REFRESH_TOKEN as unknown as number);
+
+        res.cookie(process.env.REFRESH_TOKEN_NAME as unknown as string,'', {
+            httpOnly: true,
+            expires: new Date(0),
+            secure: false, // true in production
+            domain: "localhost",
+            sameSite: "none"
+        })
     }
 }
