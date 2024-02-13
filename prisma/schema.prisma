@@ -18,9 +18,9 @@ model User {
   username       String
   email          String
   password       String
-  breakCount     Int
-  workCount      Int
-  intervalBreaks Int
+  breakCount     Int?        
+  workCount      Int?        
+  intervalBreaks Int?        
   Task           Task[]
   TaskTimer      TaskTimer[]
   TaskBlock      TaskBlock[]

@@ -1,9 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
     constructor(private readonly prismaService: PrismaService) {}
+
+    async createUser(registerDto: RegisterDto) {
+        const newUser = await this.prismaService.user.create({
+            data: {
+                ...registerDto
+            }
+        })
+    }
 
     async findOne(id: string) {
         const findOneUser = await this.prismaService.user.findUnique({
@@ -20,5 +29,22 @@ export class UsersService {
         }
 
         return findOneUser;
+    }
+
+    async findOneByEmail(email: string) {
+        const findUserByEmail = await this.prismaService.user.findFirst({
+            where: {
+                email,
+            },
+            include: {
+                Task: true,
+            },
+        });
+
+        if (!findUserByEmail) {
+            throw new NotFoundException('Requested user with this email does not exists');
+        }
+
+        return findUserByEmail;
     }
 }
