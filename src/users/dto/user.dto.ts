@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, Max, Min } from "class-validator";
+import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class TaskTimerDto {
     @IsOptional()

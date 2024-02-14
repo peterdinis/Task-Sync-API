@@ -16,7 +16,7 @@ export class UsersService {
         const newUser = await this.prismaService.user.create({
             data: {
                 ...registerDto,
-                password: hash(registerDto.password) as unknown as string
+                password: hash(registerDto.password) as unknown as string,
             },
         });
 
@@ -32,18 +32,18 @@ export class UsersService {
 
         const updateUser = await this.prismaService.user.update({
             where: {
-                id: findOneUser.id
+                id: findOneUser.id,
             },
 
             data: userDto,
             select: {
                 username: true,
-                email: true
-            }
+                email: true,
+            },
         });
 
-        if(!updateUser) {
-            throw new BadRequestException("Something went wrong doing update");
+        if (!updateUser) {
+            throw new BadRequestException('Something went wrong doing update');
         }
 
         return updateUser;
@@ -91,8 +91,8 @@ export class UsersService {
         const completedTasks = await this.prismaService.task.count({
             where: {
                 userId: id,
-                isCompleted: true
-            }
+                isCompleted: true,
+            },
         });
 
         const todayStart = startOfDay(new Date());
@@ -102,31 +102,31 @@ export class UsersService {
             where: {
                 userId: id,
                 createdAt: {
-                    gte: todayStart.toISOString()
-                }
-            }
+                    gte: todayStart.toISOString(),
+                },
+            },
         });
 
         const weekTasks = await this.prismaService.task.count({
             where: {
                 userId: id,
                 createdAt: {
-                    gte: todayStart.toISOString()
-                }
-            }
+                    gte: todayStart.toISOString(),
+                },
+            },
         });
 
         // eslint-disable-next-line @typescript-eslint/no-unsued-vars
-        const {password, ...rest} = userProfile;
+        const { password, ...rest } = userProfile;
 
         return {
             user: rest,
             statistics: [
-                {label: "Total ", value: totalTaks},
-                {label: "Completed tasks", value: completedTasks},
-                {label: "Today tasks", value: todayTasks},
-                {label: "Week tasks", value: weekTasks}
-            ]
-        }
+                { label: 'Total ', value: totalTaks },
+                { label: 'Completed tasks', value: completedTasks },
+                { label: 'Today tasks', value: todayTasks },
+                { label: 'Week tasks', value: weekTasks },
+            ],
+        };
     }
 }
