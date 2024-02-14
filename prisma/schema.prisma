@@ -33,7 +33,7 @@ model Task {
   name              String
   isImportant       Boolean
   isCompleted       Boolean
-  imporatntPriority String // TODO: Later enum
+  imporatntPriority ImporatntPriority
   User              User     @relation(fields: [userId], references: [id])
   userId            String
 }
@@ -68,4 +68,12 @@ model TaskRound {
   isDone      Boolean?
   taskTimerId String
   taskTimer   TaskTimer @relation(fields: [taskTimerId], references: [id], onDelete: Cascade)
+}
+
+
+enum ImporatntPriority {
+  Low
+  Medium
+  High
+  Extreme
 }
