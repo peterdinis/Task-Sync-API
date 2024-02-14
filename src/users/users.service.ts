@@ -35,8 +35,10 @@ export class UsersService {
                 id: findOneUser.id
             },
 
-            data: {
-                ...userDto
+            data: userDto,
+            select: {
+                username: true,
+                email: true
             }
         });
 
