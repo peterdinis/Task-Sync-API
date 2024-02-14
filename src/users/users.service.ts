@@ -6,6 +6,7 @@ import {
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash } from 'argon2';
+import { startOfDay, subDays } from './utils/dateFunctions';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +25,26 @@ export class UsersService {
         }
 
         return newUser;
+    }
+
+    async updateUser(id: string, userDto: RegisterDto) {
+        const findOneUser = await this.findOne(id);
+
+        const updateUser = await this.prismaService.user.update({
+            where: {
+                id: findOneUser.id
+            },
+
+            data: {
+                ...userDto
+            }
+        });
+
+        if(!updateUser) {
+            throw new BadRequestException("Something went wrong doing update");
+        }
+
+        return updateUser;
     }
 
     async findOne(id: string) {
@@ -60,5 +81,50 @@ export class UsersService {
         }
 
         return findUserByEmail;
+    }
+
+    async getProfile(id: string) {
+        const userProfile = await this.findOne(id);
+        const totalTaks = userProfile.Task.length;
+        const completedTasks = await this.prismaService.task.count({
+            where: {
+                userId: id,
+                isCompleted: true
+            }
+        });
+
+        const todayStart = startOfDay(new Date());
+        const weekStart = startOfDay(subDays(new Date(), 7));
+
+        const todayTasks = await this.prismaService.task.count({
+            where: {
+                userId: id,
+                createdAt: {
+                    gte: todayStart.toISOString()
+                }
+            }
+        });
+
+        const weekTasks = await this.prismaService.task.count({
+            where: {
+                userId: id,
+                createdAt: {
+                    gte: todayStart.toISOString()
+                }
+            }
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unsued-vars
+        const {password, ...rest} = userProfile;
+
+        return {
+            user: rest,
+            statistics: [
+                {label: "Total ", value: totalTaks},
+                {label: "Completed tasks", value: completedTasks},
+                {label: "Today tasks", value: todayTasks},
+                {label: "Week tasks", value: weekTasks}
+            ]
+        }
     }
 }

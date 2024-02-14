@@ -1,24 +1,19 @@
-import {
-    IsEmail,
-    IsNotEmpty,
-    IsOptional,
-    IsString,
-    MinLength,
-} from 'class-validator';
+import { IsNumber, IsOptional, Max, Min } from "class-validator";
 
-export class BasicUserDto {
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
-
-    @IsString()
+export class TaskTimerDto {
     @IsOptional()
-    username: string;
+    @IsNumber()
+    @Min(1)
+    workInterval?: number;
 
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(4, {
-        message: 'Password must have more than 4 letters',
-    })
-    password: string;
+    @IsOptional()
+    @IsNumber()
+    @Min(1)
+    breakInterval?: number;
+
+    @IsOptional()
+    @IsNumber()
+    @Min(1)
+    @Max(20)
+    intervalsCount?: number;
 }

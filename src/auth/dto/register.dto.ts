@@ -5,8 +5,9 @@ import {
     IsString,
     MinLength,
 } from 'class-validator';
+import { TaskTimerDto } from 'src/users/dto/user.dto';
 
-export class RegisterDto {
+export class RegisterDto extends TaskTimerDto {
     @IsEmail()
     @IsNotEmpty()
     email: string;
