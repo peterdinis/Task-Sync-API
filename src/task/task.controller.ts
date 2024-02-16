@@ -1,10 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
-import { ApiTags, ApiOkResponse, ApiNotFoundResponse, ApiBadRequestResponse, ApiForbiddenResponse } from '@nestjs/swagger';
+import {
+    ApiTags,
+    ApiOkResponse,
+    ApiNotFoundResponse,
+    ApiBadRequestResponse,
+    ApiForbiddenResponse,
+} from '@nestjs/swagger';
 import { CreateTaskDto } from './dto/create.task.dto';
 import { UpdateTaskDto } from './dto/update.task.dto';
 
-@ApiTags("Tasks")
+@ApiTags('Tasks')
 @Controller('task')
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
@@ -24,7 +38,9 @@ export class TaskController {
 
     @Post()
     @ApiOkResponse({ description: 'Task created successfully' })
-    @ApiBadRequestResponse({ description: 'Bad request - Task cannot be created' })
+    @ApiBadRequestResponse({
+        description: 'Bad request - Task cannot be created',
+    })
     async createTask(@Body() createTaskDto: CreateTaskDto) {
         return await this.taskService.createTask(createTaskDto);
     }
@@ -33,14 +49,19 @@ export class TaskController {
     @ApiOkResponse({ description: 'Task updated successfully' })
     @ApiNotFoundResponse({ description: 'Task not found' })
     @ApiForbiddenResponse({ description: 'Problem with updating task' })
-    async updateTask(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+    async updateTask(
+        @Param('id') id: string,
+        @Body() updateTaskDto: UpdateTaskDto,
+    ) {
         return await this.taskService.updateTask(updateTaskDto, id);
     }
 
     @Delete(':id')
     @ApiOkResponse({ description: 'Task deleted successfully' })
     @ApiNotFoundResponse({ description: 'Task not found' })
-    @ApiBadRequestResponse({ description: 'Bad request - Task cannot be deleted' })
+    @ApiBadRequestResponse({
+        description: 'Bad request - Task cannot be deleted',
+    })
     async deleteTask(@Param('id') id: string) {
         return await this.taskService.deleteTask(id);
     }
