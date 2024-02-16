@@ -1,4 +1,6 @@
-import { IsBoolean, IsDateString, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Transform } from "class-transformer";
+import { ImporatntPriority } from "@prisma/client";
 
 export class CreateTaskDto {
     @IsString()
@@ -13,6 +15,9 @@ export class CreateTaskDto {
     @IsOptional()
     @IsDateString()
     createdAt?: string;
-
     
+    @IsEnum(ImporatntPriority)
+    @IsOptional()
+    @Transform(({value}) => ("" + value).toLowerCase())
+    imporatntPriority?: ImporatntPriority
 }
