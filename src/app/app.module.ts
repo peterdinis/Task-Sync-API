@@ -7,6 +7,7 @@ import { UsersModule } from 'src/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TaskModule } from 'src/task/task.module';
 import { TaskBlockModule } from 'src/task-block/task-block.module';
+import { TaskTimerModule } from 'src/task-timer/task-timer.module';
 
 @Module({
     imports: [
@@ -17,7 +18,8 @@ import { TaskBlockModule } from 'src/task-block/task-block.module';
             isGlobal: true,
         }),
         TaskModule,
-        TaskBlockModule
+        TaskBlockModule,
+        TaskTimerModule
     ],
     controllers: [AppController],
     providers: [AppService],
