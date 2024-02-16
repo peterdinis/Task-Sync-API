@@ -1,17 +1,31 @@
 import { User } from '@prisma/client';
 import {
     BadRequestException,
+    ConflictException,
     ForbiddenException,
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateTaskDto } from './dto/update.task.dto';
-import { CreateTaskDto } from './dto/create.task.dto';
 
 @Injectable()
 export class TaskService {
     constructor(private readonly prismaService: PrismaService) {}
+
+    async getAllUserTasks(userId: string) {
+      const findAllTasksForUser = await this.prismaService.task.findMany({
+         where: {
+            userId
+         }
+      })
+
+      if(!findAllTasksForUser) {
+         throw new ConflictException("User is not logged or not exists");
+      }
+
+      return findAllTasksForUser;
+    }
 
     async findAllTasks() {
         const allTasksInDB = await this.prismaService.task.findMany({});

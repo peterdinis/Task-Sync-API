@@ -17,11 +17,17 @@ import {
 } from '@nestjs/swagger';
 import { CreateTaskDto } from './dto/create.task.dto';
 import { UpdateTaskDto } from './dto/update.task.dto';
+import { CurrentUser } from 'src/users/decorators/user.decorator';
 
 @ApiTags('Tasks')
 @Controller('task')
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
+
+    @Get("/user")
+    async getUserTasks(@CurrentUser("id") userId: string) {
+        return this.taskService.getAllUserTasks(userId);
+    }
 
     @Get()
     @ApiOkResponse({ description: 'List of all tasks' })
