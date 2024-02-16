@@ -14,17 +14,17 @@ export class TaskService {
     constructor(private readonly prismaService: PrismaService) {}
 
     async getAllUserTasks(userId: string) {
-      const findAllTasksForUser = await this.prismaService.task.findMany({
-         where: {
-            userId
-         }
-      })
+        const findAllTasksForUser = await this.prismaService.task.findMany({
+            where: {
+                userId,
+            },
+        });
 
-      if(!findAllTasksForUser) {
-         throw new ConflictException("User is not logged or not exists");
-      }
+        if (!findAllTasksForUser) {
+            throw new ConflictException('User is not logged or not exists');
+        }
 
-      return findAllTasksForUser;
+        return findAllTasksForUser;
     }
 
     async findAllTasks() {

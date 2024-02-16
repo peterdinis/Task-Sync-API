@@ -9,43 +9,44 @@ datasource db {
 }
 
 model Project {
-  id             String         @id @default(cuid())
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  members        Int            @default(1)
-  membersList    User[]         @relation("ProjectMembers")
+  id                 String              @id @default(cuid())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  members            Int                 @default(1)
+  membersList        User[]              @relation("ProjectMembers")
   projectMemberships ProjectMembership[]
+  tasks              Task[]
 }
 
-
 model User {
-  id             String      @id @default(cuid())
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  username       String
-  email          String
-  password       String
-  breakCount     Int?
-  workCount      Int?
-  intervalBreaks Int?
-  Task           Task[]
-  TaskTimer      TaskTimer[]
-  TaskBlock      TaskBlock[]
-  projectsList   Project[]   @relation("ProjectMembers")
-  // Add the opposite relation field for ProjectMembership
+  id                 String              @id @default(cuid())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  username           String
+  email              String
+  password           String
+  breakCount         Int?
+  workCount          Int?
+  intervalBreaks     Int?
+  Task               Task[]
+  TaskTimer          TaskTimer[]
+  TaskBlock          TaskBlock[]
+  projectsList       Project[]           @relation("ProjectMembers")
   projectMemberships ProjectMembership[]
 }
 
 model Task {
-  id                String           @id @default(cuid())
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
   name              String
-  isImportant       Boolean          @default(false)
-  isCompleted       Boolean          @default(false)
+  isImportant       Boolean           @default(false)
+  isCompleted       Boolean           @default(false)
   importantPriority ImporatntPriority
-  User              User             @relation(fields: [userId], references: [id])
+  User              User              @relation(fields: [userId], references: [id])
   userId            String
+  project           Project           @relation(fields: [projectId], references: [id])
+  projectId         String
 }
 
 model TaskBlock {
@@ -91,12 +92,12 @@ enum ImporatntPriority {
 model ProjectMembership {
   userId    String
   projectId String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Define foreign keys
-  user     User      @relation(fields: [userId], references: [id])
-  project  Project   @relation(fields: [projectId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
 
   @@id([userId, projectId])
 }

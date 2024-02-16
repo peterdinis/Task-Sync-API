@@ -24,8 +24,8 @@ import { CurrentUser } from 'src/users/decorators/user.decorator';
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 
-    @Get("/user")
-    async getUserTasks(@CurrentUser("id") userId: string) {
+    @Get('/user')
+    async getUserTasks(@CurrentUser('id') userId: string) {
         return this.taskService.getAllUserTasks(userId);
     }
 

@@ -21,7 +21,7 @@ import { ProjectModule } from 'src/project/project.module';
         }),
         TaskModule,
         TaskBlockModule,
-        TaskTimerModule
+        TaskTimerModule,
     ],
     controllers: [AppController],
     providers: [AppService],

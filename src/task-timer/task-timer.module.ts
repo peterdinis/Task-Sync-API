@@ -4,8 +4,8 @@ import { TaskTimerController } from './task-timer.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [TaskTimerController],
-  providers: [TaskTimerService],
+    imports: [PrismaModule],
+    controllers: [TaskTimerController],
+    providers: [TaskTimerService],
 })
 export class TaskTimerModule {}
