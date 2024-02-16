@@ -14,6 +14,7 @@ model Project {
   updatedAt          DateTime            @updatedAt
   members            Int                 @default(1)
   membersList        User[]              @relation("ProjectMembers")
+  ownerUsername      String
   projectMemberships ProjectMembership[]
   tasks              Task[]
 }
