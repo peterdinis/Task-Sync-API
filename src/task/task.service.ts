@@ -27,7 +27,8 @@ export class TaskService {
       return findOneTask;
    }
 
-   async createTask(taskDto: CreateTaskDto) {
+   // TODO: Neskôr nahradiť za CreateTaskDto
+   async createTask(taskDto: any) {
       const newTask = await this.prismaService.task.create({
          data: {
             ...taskDto

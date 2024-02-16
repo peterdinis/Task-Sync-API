@@ -4,20 +4,26 @@ import { ImporatntPriority } from "@prisma/client";
 
 export class CreateTaskDto {
     @IsString()
-    @IsOptional()
-    name?: string;
+    @IsNotEmpty()
+    name: string;
 
     @IsBoolean()
     @IsOptional()
     isCompleted?: boolean;
 
-    @IsString()
-    @IsOptional()
     @IsDateString()
+    @IsOptional()
     createdAt?: string;
     
     @IsEnum(ImporatntPriority)
     @IsOptional()
-    @Transform(({value}) => ("" + value).toLowerCase())
-    imporatntPriority?: ImporatntPriority
+    @Transform(({ value }) => ("" + value).toLowerCase())
+    imporatntPriority?: ImporatntPriority;
+
+    @IsBoolean()
+    @IsOptional()
+    isImportant?: boolean;
+
+    @IsNotEmpty()
+    userId: string;
 }
