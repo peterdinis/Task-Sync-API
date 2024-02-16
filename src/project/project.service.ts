@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as argon2 from "argon2";
 
 @Injectable()
 export class ProjectService {
@@ -59,4 +60,62 @@ export class ProjectService {
         return onwerProjectInfo;
     }
 
+    async createProject(projectDto: CreateProjectDto) {
+        const newProject = await this.prismaService.project.create({
+            data: {
+                ...projectDto
+            }
+        })
+
+        if(!newProject) {
+            throw new BadRequestException("Problem with creation of new project")
+        }
+
+        return newProject;
+    }
+
+    async updateProject(projectId: string, projectDto: UpdateProjectDto) {
+        const findProjectInfo = await this.findProjectById(projectId);
+
+        if(!await argon2.verify(findProjectInfo.ownerUsername, projectDto.ownerUsername)) {
+            throw new ConflictException("You can not update project because you are not the owner");
+        }
+
+        const updateProject = await this.prismaService.project.update({
+            where: {
+                id: projectId
+            },
+            data: projectDto
+        });
+
+        if(!updateProject) {
+            throw new BadRequestException("Project can not be updated");
+        }
+
+        return updateProject;
+    }
+
+    async deleteProject(ownerUsername: string, projectId: string) {
+        const findProjectInfo = await this.findProjectById(projectId);
+
+        if(!await argon2.verify(findProjectInfo.ownerUsername, ownerUsername)) {
+            throw new ConflictException("You can not delete project because you are not the owner");
+        }
+
+        const deleteProject = await this.prismaService.project.delete({
+            where: {
+                id: projectId
+            }
+        });
+
+        if(!deleteProject) {
+            throw new ForbiddenException("Delete project failed");
+        }
+
+        return deleteProject;
+    }
+
+    async addNewMemberToProject() {}
+
+    async removeMemberFromProject() {}
 }

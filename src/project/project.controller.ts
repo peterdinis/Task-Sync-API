@@ -48,4 +48,16 @@ export class ProjectController {
     async returnAllOwnerProjects(@Param("ownerUsername") ownerUsername: string) {
         return this.projectService.findOwnerProjects(ownerUsername)
     }
+
+    @ApiOperation({
+        summary: "Find detail info about owner project"
+    })
+    @ApiOkResponse({
+        status: 200,
+        type: ViewOwnerProjectsDto
+    })
+    @Get("/owner/:username/:id")
+    async returnInfoAboutOneOfOwnerProject(@Param("ownerUsername") ownerUsername: string, @Param("projectId") projectId: string) {
+        return this.projectService.findOwnerProjectDetail(ownerUsername, projectId);
+    }
 }
