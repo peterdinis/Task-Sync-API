@@ -1,15 +1,22 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider      = "prisma-client-js"
-  output = "../node_modules/.prisma/client"
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Project {
+  id             String         @id @default(cuid())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  members        Int            @default(1)
+  membersList    User[]         @relation("ProjectMembers")
+  projectMemberships ProjectMembership[]
+}
+
 
 model User {
   id             String      @id @default(cuid())
@@ -18,23 +25,26 @@ model User {
   username       String
   email          String
   password       String
-  breakCount     Int?        
-  workCount      Int?        
-  intervalBreaks Int?        
+  breakCount     Int?
+  workCount      Int?
+  intervalBreaks Int?
   Task           Task[]
   TaskTimer      TaskTimer[]
   TaskBlock      TaskBlock[]
+  projectsList   Project[]   @relation("ProjectMembers")
+  // Add the opposite relation field for ProjectMembership
+  projectMemberships ProjectMembership[]
 }
 
 model Task {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                String           @id @default(cuid())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
   name              String
-  isImportant       Boolean  @default(false)
-  isCompleted       Boolean  @default(false)
-  imporatntPriority ImporatntPriority
-  User              User     @relation(fields: [userId], references: [id])
+  isImportant       Boolean          @default(false)
+  isCompleted       Boolean          @default(false)
+  importantPriority ImporatntPriority
+  User              User             @relation(fields: [userId], references: [id])
   userId            String
 }
 
@@ -70,11 +80,23 @@ model TaskRound {
   taskTimer   TaskTimer @relation(fields: [taskTimerId], references: [id], onDelete: Cascade)
 }
 
-
 enum ImporatntPriority {
   Low
   Medium
   High
   Extreme
   Blocker
+}
+
+model ProjectMembership {
+  userId    String
+  projectId String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Define foreign keys
+  user     User      @relation(fields: [userId], references: [id])
+  project  Project   @relation(fields: [projectId], references: [id])
+
+  @@id([userId, projectId])
 }
