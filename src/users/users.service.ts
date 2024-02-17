@@ -111,7 +111,7 @@ export class UsersService {
             where: {
                 userId: id,
                 createdAt: {
-                    gte: todayStart.toISOString(),
+                    gte: weekStart.toISOString(),
                 },
             },
         });
