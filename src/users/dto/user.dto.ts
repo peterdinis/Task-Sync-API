@@ -1,4 +1,13 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min, MinLength } from 'class-validator';
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
+    Max,
+    Min,
+    MinLength,
+} from 'class-validator';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 
 export class TaskTimerDto {
@@ -18,7 +27,6 @@ export class TaskTimerDto {
     @Max(20)
     intervalsCount?: number;
 }
-
 
 export class UserDto {
     @IsEmail()

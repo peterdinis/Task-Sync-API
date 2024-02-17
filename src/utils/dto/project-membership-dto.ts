@@ -1,5 +1,5 @@
-import { IsArray, IsNotEmpty } from "class-validator";
-import { ViewProjectsDto } from "src/project/dto/view-projects.dto";
+import { IsArray, IsNotEmpty } from 'class-validator';
+import { ViewProjectsDto } from 'src/project/dto/view-projects.dto';
 
 export class ProjectMembershipDto {
     @IsArray()

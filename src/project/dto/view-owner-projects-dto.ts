@@ -1,3 +1,3 @@
-import { ViewProjectsDto } from "./view-projects.dto";
+import { ViewProjectsDto } from './view-projects.dto';
 
 export class ViewOwnerProjectsDto extends ViewProjectsDto {}
