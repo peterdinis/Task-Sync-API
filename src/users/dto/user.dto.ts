@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min, MinLength } from 'class-validator';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 
 export class TaskTimerDto {
