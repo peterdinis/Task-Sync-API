@@ -21,6 +21,8 @@ import { ViewProjectsDto } from './dto/view-projects.dto';
 import { ViewOwnerProjectsDto } from './dto/view-owner-projects-dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { AddMemberToProjectDto } from './dto/add-member-to-project-dto';
+import { DeleteMemberFromProjectDto } from './dto/delete-member-from-project.dto';
 
 @ApiTags('Projects')
 @Controller('projects')
@@ -161,5 +163,29 @@ export class ProjectController {
     @Get("/search")
     async searchForSpecificProject(@Query("projectName") projectName: string) {
         return this.projectService.searchProjectByName(projectName);
+    }
+
+    @ApiOperation({
+        summary: "Add new member to project"
+    })
+    @ApiCreatedResponse({
+        status: 201,
+        type: AddMemberToProjectDto
+    })
+    @Post("/member/add")
+    async addNewMember(@Body() addMemberDto: AddMemberToProjectDto) {
+        return this.projectService.addNewMemberToProject(addMemberDto);
+    }
+
+    @ApiOperation({
+        summary: "Delete member from project"
+    })
+    @ApiOkResponse({
+        status: 200,
+        type: DeleteMemberFromProjectDto
+    })
+    @Delete("/member/delete")
+    async deleteMemberFromProject(@Body() deleteMemberDto: DeleteMemberFromProjectDto) {
+        return this.projectService.removeMemberFromProject(deleteMemberDto);
     }
 }

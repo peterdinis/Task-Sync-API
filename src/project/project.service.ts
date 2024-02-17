@@ -10,6 +10,8 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon2 from 'argon2';
 import { Prisma } from '@prisma/client';
+import { AddMemberToProjectDto } from './dto/add-member-to-project-dto';
+import { DeleteMemberFromProjectDto } from './dto/delete-member-from-project.dto';
 
 @Injectable()
 export class ProjectService {
@@ -186,7 +188,60 @@ export class ProjectService {
         return projects;
     }
 
-    async addNewMemberToProject() {}
+    async addNewMemberToProject(addNewMemberDto: AddMemberToProjectDto) {
+        const project = await this.prismaService.project.findUnique({
+            where: { id: addNewMemberDto.projectId },
+            include: { membersList: true },
+        });
 
-    async removeMemberFromProject() {}
+        const user = await this.prismaService.user.findUnique({
+            where: { id: addNewMemberDto.userId },
+        });
+
+        if(!project || !user) {
+            throw new NotFoundException("Project or user not found");
+        }
+
+        const isUserAlreadyMember = project.membersList.some(member => member.id === addNewMemberDto.userId);
+
+        if (isUserAlreadyMember) {
+            throw new ConflictException('User is already a member of the project');
+        }
+
+        const newMembership: AddMemberToProjectDto = await this.prismaService.projectMembership.create({
+            data: {
+                ...addNewMemberDto
+            },
+        });
+
+        return newMembership;
+    }
+
+    async removeMemberFromProject(deleteMemberDto: DeleteMemberFromProjectDto) {
+        const project = await this.prismaService.project.findUnique({
+            where: { id: deleteMemberDto.projectId },
+            include: { membersList: true },
+        });
+
+        if (!project) {
+            throw new NotFoundException('Project not found');
+        }
+
+        const memberIndex = project.membersList.findIndex(member => member.id === deleteMemberDto.userId);
+
+        if (memberIndex === -1) {
+            throw new NotFoundException('User is not a member of the project');
+        }
+
+        const updateProjectMembers = await this.prismaService.project.update({
+            where: {id: deleteMemberDto.projectId},
+            data: {
+                membersList: {
+                    disconnect: {id: deleteMemberDto.userId}
+                }
+            }
+        });
+
+        return updateProjectMembers;
+    }
 }
