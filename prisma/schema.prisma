@@ -37,7 +37,6 @@ model User {
   projectMemberships ProjectMembership[]
 }
 
-// TODO: Add new column for images
 model Task {
   id                 String            @id @default(cuid())
   createdAt          DateTime          @default(now())
@@ -54,6 +53,7 @@ model Task {
   isDone             Boolean?
   totalSec           Int?              @default(0)
   startWorkingOnTask Boolean?          @default(false)
+  infoImage          String?        
 }
 
 enum ImporatntPriority {

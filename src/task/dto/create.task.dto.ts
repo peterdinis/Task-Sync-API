@@ -49,6 +49,10 @@ export class CreateTaskDto {
     @IsNotEmpty()
     isDone: boolean;
 
+    @IsString()
+    @IsNotEmpty()
+    imageInfo: string;
+
     @IsNumber()
     @IsPositive()
     @IsNotEmpty()
