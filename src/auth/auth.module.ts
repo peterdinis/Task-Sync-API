@@ -11,7 +11,7 @@ import { JwtAuthGuard } from './guards/jwt.guard';
         JwtModule.register({
             global: true,
             secret: process.env.JWT_SECRET as unknown as string,
-            signOptions: { expiresIn: '60s' },
+            signOptions: { expiresIn: process.env.EXPIRES_IN as unknown as string },
         }),
         PrismaModule,
         UsersModule,
