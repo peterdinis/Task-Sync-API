@@ -1,6 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectService } from 'src/project/project.service';
+import { CreateTaskDto } from './dto/create.task.dto';
+import { UpdateTaskDto } from './dto/update.task.dto';
 
 @Injectable()
 export class TaskService {
@@ -77,4 +79,20 @@ export class TaskService {
 
         return findAllTasksThatAreCompleted;
     }
+
+    async createNewTask(createTaskDto: any) {
+        const newTask = await this.prismaService.task.create({
+            data: {
+                ...createTaskDto
+            }
+        });
+
+        if(!newTask) {
+            throw new BadRequestException("Failed to create new tasks");
+        }
+
+        return newTask;
+    }
+
+    async updateTask(updateTaskDto: UpdateTaskDto) {}
 }

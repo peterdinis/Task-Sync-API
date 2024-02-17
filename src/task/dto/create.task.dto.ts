@@ -39,7 +39,7 @@ export class CreateTaskDto {
 
     @IsNotEmpty()
     @IsString()
-    userId: string;
+    userId: string
 
     @IsNotEmpty()
     @IsString()

@@ -1,7 +1,8 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ViewTaskDto } from './dto/view.task.dto';
+import { CreateTaskDto } from './dto/create.task.dto';
 
 @ApiTags('Tasks')
 @Controller('tasks')
@@ -65,5 +66,17 @@ export class TaskController {
     @Get("/noncompleted")
     async returnAllNonCompletedTasks() {
         return this.taskService.findNonCompletedTasks();
+    }
+
+    @ApiOperation({
+        summary: "Create new task"
+    })
+    @ApiCreatedResponse({
+        status: 201,
+        type: CreateTaskDto
+    })
+    @Post("/create")
+    async createNewTask(@Body() createTaskDto: any) {
+        return this.taskService.createNewTask(createTaskDto);
     }
 }
