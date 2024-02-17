@@ -88,6 +88,14 @@ export class UsersService {
     async getProfile(id: string) {
         const userProfile = await this.findOne(id);
         const totalTaks = userProfile.Task.length;
+        const projectsThatIAmIn = await this.prismaService.projectMembership.findMany({
+            where: {
+                userId: id,
+            },
+            include: {
+                project: true,
+            },
+        });
         const completedTasks = await this.prismaService.task.count({
             where: {
                 userId: id,
@@ -121,6 +129,7 @@ export class UsersService {
 
         return {
             user: rest,
+            projects: projectsThatIAmIn.map((membership) => membership.project),
             statistics: [
                 { label: 'Total ', value: totalTaks },
                 { label: 'Completed tasks', value: completedTasks },
