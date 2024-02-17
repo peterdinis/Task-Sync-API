@@ -4,7 +4,10 @@ import { ProjectService } from 'src/project/project.service';
 
 @Injectable()
 export class TaskService {
-    constructor(private readonly prismaService: PrismaService, private readonly projectService: ProjectService) {}
+    constructor(
+        private readonly prismaService: PrismaService,
+        private readonly projectService: ProjectService,
+    ) {}
 
     async getAllTasks() {
         const findAllTasks = await this.prismaService.task.findMany();
@@ -14,31 +17,64 @@ export class TaskService {
     async getTaskById(id: string) {
         const findOneTask = await this.prismaService.task.findUnique({
             where: {
-                id
-            }
+                id,
+            },
         });
 
-        if(!findOneTask) {
-            throw new NotFoundException("Task with this id does not exists");
+        if (!findOneTask) {
+            throw new NotFoundException('Task with this id does not exists');
         }
 
         return findOneTask;
     }
 
     async findAllProjectTasks(projectId: string) {
-        const findOneProject = await this.projectService.findProjectById(projectId);
+        const findOneProject =
+            await this.projectService.findProjectById(projectId);
 
-        const findAllTasksRelatedToProject = await this.prismaService.task.findMany({
-            where: {
-                projectId: findOneProject.id
-            }
-        })
+        const findAllTasksRelatedToProject =
+            await this.prismaService.task.findMany({
+                where: {
+                    projectId: findOneProject.id,
+                },
+            });
 
-        if(!findAllTasksRelatedToProject) {
-            throw new NotFoundException("Could not found any tasks for requested project");
+        if (!findAllTasksRelatedToProject) {
+            throw new NotFoundException(
+                'Could not found any tasks for requested project',
+            );
         }
 
-        return findAllTasksRelatedToProject
+        return findAllTasksRelatedToProject;
     }
 
+    async findAllCompletedTasks() {
+        const findAllTasksThatAreCompleted =
+            await this.prismaService.task.findMany({
+                where: {
+                    isCompleted: true,
+                },
+            });
+
+        if (!findAllTasksThatAreCompleted) {
+            throw new NotFoundException('No tasks are completed');
+        }
+
+        return findAllTasksThatAreCompleted;
+    }
+
+    async findNonCompletedTasks() {
+        const findAllTasksThatAreCompleted =
+            await this.prismaService.task.findMany({
+                where: {
+                    isCompleted: false,
+                },
+            });
+
+        if (!findAllTasksThatAreCompleted) {
+            throw new NotFoundException('No tasks are completed');
+        }
+
+        return findAllTasksThatAreCompleted;
+    }
 }

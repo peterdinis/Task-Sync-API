@@ -9,7 +9,7 @@ export class ViewProjectsDto {
 
     @ApiProperty()
     ownerUsername: string;
-    
+
     @ApiProperty()
     projectName: string;
 

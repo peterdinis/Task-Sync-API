@@ -3,7 +3,9 @@ import {
     IsDateString,
     IsEnum,
     IsNotEmpty,
+    IsNumber,
     IsOptional,
+    IsPositive,
     IsString,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
@@ -13,6 +15,10 @@ export class CreateTaskDto {
     @IsString()
     @IsNotEmpty()
     name: string;
+
+    @IsString()
+    @IsNotEmpty()
+    description: string;
 
     @IsBoolean()
     @IsOptional()
@@ -27,10 +33,28 @@ export class CreateTaskDto {
     @Transform(({ value }) => ('' + value).toLowerCase())
     imporatntPriority?: ImporatntPriority;
 
-    @IsBoolean()
-    @IsOptional()
-    isImportant?: boolean;
+    @IsNotEmpty()
+    @IsString()
+    reporter: string;
 
     @IsNotEmpty()
+    @IsString()
     userId: string;
+
+    @IsNotEmpty()
+    @IsString()
+    projectId: string;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    isDone: boolean;
+
+    @IsNumber()
+    @IsPositive()
+    @IsNotEmpty()
+    totalSec: number;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    startWorkingOnTask: boolean;
 }

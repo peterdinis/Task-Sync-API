@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ImporatntPriority, Project, User } from "@prisma/client";
-import { Transform } from "class-transformer";
+import { ApiProperty } from '@nestjs/swagger';
+import { ImporatntPriority, Project, User } from '@prisma/client';
+import { Transform } from 'class-transformer';
 
 export class ViewTaskDto {
     @ApiProperty()
@@ -26,7 +26,7 @@ export class ViewTaskDto {
     reporter: string;
 
     @ApiProperty()
-    project: Project
+    project: Project;
 
     @ApiProperty()
     user: User;
