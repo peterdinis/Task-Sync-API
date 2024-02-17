@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Put,
+    Query,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
@@ -36,6 +37,18 @@ export class ProjectController {
     @Get('/')
     async returnAllProjects() {
         return this.projectService.getAllProjects();
+    }
+
+    @ApiOperation({
+        summary: 'Find all sorted projects',
+    })
+    @ApiOkResponse({
+        status: 200,
+        type: [ViewProjectsDto],
+    })
+    @Get('/sorted')
+    async sortedProjects() {
+        return this.projectService.getNewSortedProjects();
     }
 
     @ApiOperation({
@@ -123,5 +136,30 @@ export class ProjectController {
         @Param('ownerUsername') ownerUsername: string,
     ) {
         return this.projectService.deleteProject(ownerUsername, id);
+    }
+
+    @ApiOperation({
+        summary: 'Paginated projects',
+    })
+    @ApiOkResponse({
+        status: 200,
+    })
+    @Get('/paginate')
+    async paginatedProjects(
+        @Query('page') page: number,
+        @Query('pageSize') pageSize: number,
+    ) {
+        return this.projectService.paginatedProjects(page, pageSize);
+    }
+
+    @ApiOperation({
+        summary: "Search for project by projectName"
+    })
+    @ApiOkResponse({
+        status: 200
+    })
+    @Get("/search")
+    async searchForSpecificProject(@Query("projectName") projectName: string) {
+        return this.projectService.searchProjectByName(projectName);
     }
 }

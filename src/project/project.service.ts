@@ -151,6 +151,41 @@ export class ProjectService {
         return deleteProject;
     }
 
+    async paginatedProjects(page: number, pageSize: number) {
+        const skip = (page - 1) * pageSize;
+        const take = pageSize;
+
+        const projects = await this.prismaService.project.findMany({
+            orderBy: { createdAt: Prisma.SortOrder.asc },
+            skip,
+            take,
+        });
+
+        if (!projects || projects.length === 0) {
+            throw new NotFoundException('No projects found');
+        }
+
+        return projects;
+    }
+
+    async searchProjectByName(projectName: string) {
+        const projects = await this.prismaService.project.findMany({
+            where: {
+                projectName: {
+                    contains: projectName,
+                    mode: 'insensitive',
+                },
+            },
+            orderBy: { createdAt: Prisma.SortOrder.asc },
+        });
+
+        if (!projects || projects.length === 0) {
+            throw new NotFoundException('No projects found with this name');
+        }
+
+        return projects;
+    }
+
     async addNewMemberToProject() {}
 
     async removeMemberFromProject() {}
