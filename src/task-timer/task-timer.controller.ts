@@ -12,7 +12,7 @@ import { CreateTaskTimerDto } from './dto/create-task-timer.dto';
 import { UpdateTaskTimerDto } from './dto/update-task-timer.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags("Task-Timer")
+@ApiTags('Task-Timer')
 @Controller('task-timer')
 export class TaskTimerController {
     constructor(private readonly taskTimerService: TaskTimerService) {}

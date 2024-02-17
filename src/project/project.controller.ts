@@ -155,37 +155,39 @@ export class ProjectController {
     }
 
     @ApiOperation({
-        summary: "Search for project by projectName"
+        summary: 'Search for project by projectName',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Get("/search")
-    async searchForSpecificProject(@Query("projectName") projectName: string) {
+    @Get('/search')
+    async searchForSpecificProject(@Query('projectName') projectName: string) {
         return this.projectService.searchProjectByName(projectName);
     }
 
     @ApiOperation({
-        summary: "Add new member to project"
+        summary: 'Add new member to project',
     })
     @ApiCreatedResponse({
         status: 201,
-        type: AddMemberToProjectDto
+        type: AddMemberToProjectDto,
     })
-    @Post("/member/add")
+    @Post('/member/add')
     async addNewMember(@Body() addMemberDto: AddMemberToProjectDto) {
         return this.projectService.addNewMemberToProject(addMemberDto);
     }
 
     @ApiOperation({
-        summary: "Delete member from project"
+        summary: 'Delete member from project',
     })
     @ApiOkResponse({
         status: 200,
-        type: DeleteMemberFromProjectDto
+        type: DeleteMemberFromProjectDto,
     })
-    @Delete("/member/delete")
-    async deleteMemberFromProject(@Body() deleteMemberDto: DeleteMemberFromProjectDto) {
+    @Delete('/member/delete')
+    async deleteMemberFromProject(
+        @Body() deleteMemberDto: DeleteMemberFromProjectDto,
+    ) {
         return this.projectService.removeMemberFromProject(deleteMemberDto);
     }
 }

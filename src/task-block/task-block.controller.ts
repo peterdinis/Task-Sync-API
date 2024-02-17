@@ -12,7 +12,7 @@ import { CreateTaskBlockDto } from './dto/create-task-block.dto';
 import { UpdateTaskBlockDto } from './dto/update-task-block.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags("Task-Block")
+@ApiTags('Task-Block')
 @Controller('task-block')
 export class TaskBlockController {
     constructor(private readonly taskBlockService: TaskBlockService) {}

@@ -5,10 +5,12 @@ import {
     Req,
     Res,
     UnauthorizedException,
+    UseGuards,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
 import {
+    ApiBearerAuth,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -18,11 +20,16 @@ import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { JwtAuthGuard } from './guards/jwt.guard';
+import { UsersService } from 'src/users/users.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly usersService: UsersService,
+    ) {}
 
     @ApiOperation({
         summary: 'Login user',
@@ -96,5 +103,20 @@ export class AuthController {
     async logoutUser(@Res({ passthrough: true }) res: Response) {
         this.authService.refreshTokenRemoveToResponse(res);
         return true;
+    }
+
+    @ApiOperation({
+        summary: 'Get user profile',
+    })
+    @ApiOkResponse({
+        status: 200,
+    })
+    @ApiBearerAuth()
+    @UseGuards(new JwtAuthGuard('jwt'))
+    async getProfile(@Req() req: Request) {
+        const userId = req.user['id']; // Assuming your JWT payload has an 'id' field
+
+        const profile = await this.usersService.getProfile(userId);
+        return profile;
     }
 }
