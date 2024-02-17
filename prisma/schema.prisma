@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../node_modules/.prisma/client"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -12,6 +13,7 @@ model Project {
   id                 String              @id @default(cuid())
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
+  description        String              @default("Your project description")
   projectName        String              @default("Your project name")
   members            Int                 @default(1)
   membersList        User[]              @relation("ProjectMembers")

@@ -8,6 +8,9 @@ export class ViewProjectsDto {
     members: number;
 
     @ApiProperty()
+    description: string;
+
+    @ApiProperty()
     ownerUsername: string;
 
     @ApiProperty()

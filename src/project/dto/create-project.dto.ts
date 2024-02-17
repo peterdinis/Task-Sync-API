@@ -11,4 +11,9 @@ export class CreateProjectDto {
     @IsString()
     @ApiProperty()
     ownerUsername: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    description: string;
 }
