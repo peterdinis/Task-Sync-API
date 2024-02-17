@@ -31,8 +31,6 @@ model User {
   workCount          Int?
   intervalBreaks     Int?
   Task               Task[]
-  TaskTimer          TaskTimer[]
-  TaskBlock          TaskBlock[]
   projectsList       Project[]           @relation("ProjectMembers")
   projectMemberships ProjectMembership[]
 }
@@ -42,7 +40,6 @@ model Task {
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   name              String
-  isImportant       Boolean           @default(false)
   isCompleted       Boolean           @default(false)
   importantPriority ImporatntPriority
   reporter          String 
@@ -50,40 +47,10 @@ model Task {
   userId            String
   project           Project           @relation(fields: [projectId], references: [id])
   projectId         String
+  isDone            Boolean?
+  totalSec          Int?              @default(0)
+  startWorkingOnTask Boolean?         @default(false)
 }
-
-model TaskBlock {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  color     String?
-  duration  Int
-  order     Int      @default(1)
-  User      User     @relation(fields: [userId], references: [id])
-  userId    String
-}
-
-model TaskTimer {
-  id        String      @id @default(cuid())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  isDone    Boolean?
-  User      User        @relation(fields: [userId], references: [id])
-  userId    String
-  TaskRound TaskRound[]
-}
-
-model TaskRound {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  totalSec    Int
-  isDone      Boolean?
-  taskTimerId String
-  taskTimer   TaskTimer @relation(fields: [taskTimerId], references: [id], onDelete: Cascade)
-}
-
 enum ImporatntPriority {
   Low
   Medium
