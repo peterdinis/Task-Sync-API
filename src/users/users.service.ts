@@ -124,6 +124,12 @@ export class UsersService {
             },
         });
 
+        const myReportedTasks = await this.prismaService.task.findMany({
+            where: {
+                reporter: userProfile.email
+            }
+        })
+
         // eslint-disable-next-line @typescript-eslint/no-unsued-vars
         const { password, ...rest } = userProfile;
 
@@ -135,6 +141,7 @@ export class UsersService {
                 { label: 'Completed tasks', value: completedTasks },
                 { label: 'Today tasks', value: todayTasks },
                 { label: 'Week tasks', value: weekTasks },
+                { label: 'Reported tasks', value: myReportedTasks}
             ],
         };
     }
