@@ -14,5 +14,9 @@ export class ViewProjectsDto {
     @IsString()
     ownerUsername: string;
 
+    @IsNotEmpty()
+    @IsString()
+    projectName: string;
+
     // TODO: Later add more fileds
 }
