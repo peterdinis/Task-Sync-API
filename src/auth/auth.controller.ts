@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     Post,
     Req,
     Res,
@@ -113,6 +114,7 @@ export class AuthController {
     })
     @ApiBearerAuth()
     @UseGuards(new JwtAuthGuard('jwt'))
+    @Get("/profile")
     async getProfile(@Req() req: Request) {
         const userId = req.user['id']; // Assuming your JWT payload has an 'id' field
 
