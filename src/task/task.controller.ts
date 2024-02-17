@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ViewTaskDto } from './dto/view.task.dto';
 import { CreateTaskDto } from './dto/create.task.dto';
+import { UpdateTaskDto } from './dto/update.task.dto';
 
 @ApiTags('Tasks')
 @Controller('tasks')
@@ -69,6 +70,17 @@ export class TaskController {
     }
 
     @ApiOperation({
+        summary: "Find all sorted tasks"
+    })
+    @ApiOkResponse({
+        status: 200
+    })
+    @Get("/sorted")
+    async allSortedTasks() {
+        return this.taskService.sortedTasks();
+    }
+
+    @ApiOperation({
         summary: "Create new task"
     })
     @ApiCreatedResponse({
@@ -78,5 +90,53 @@ export class TaskController {
     @Post("/create")
     async createNewTask(@Body() createTaskDto: any) {
         return this.taskService.createNewTask(createTaskDto);
+    }
+
+    @ApiOperation({
+        summary: "Update task"
+    })
+    @ApiOkResponse({
+        status: 200,
+        type: UpdateTaskDto
+    })
+    @Put("/:id/update")
+    async updateTask(@Param("id") id: string, @Body() updateTaskDto: UpdateTaskDto) {
+        return this.taskService.updateTask(id, updateTaskDto);
+    }
+
+    @ApiOperation({
+        summary: "Delete task"
+    })
+    @ApiOkResponse({
+        status: 200
+    })
+    @Delete("/:id/delete")
+    async deleteTask(@Param("id") id: string) {
+        return this.taskService.deleteTask(id);
+    }
+
+    @ApiOperation({
+        summary: "Paginated tasks"
+    })
+    @ApiOkResponse({
+        status: 200
+    })
+    @Get("/paginate")
+    async paginatedTasks(
+        @Query("page") page: number,
+        @Query("pageSize") pageSize: number
+    ) {
+        return this.taskService.paginatedTasks(page, pageSize);
+    }
+
+    @ApiOperation({
+        summary: "Search for project by name"
+    })
+    @ApiOkResponse({
+        status: 200
+    })
+    @Get("/search")
+    async searchForTaskByName(@Query("name") name: string) {
+        return this.taskService.searchTaskByName(name);
     }
 }
