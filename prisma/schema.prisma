@@ -35,22 +35,25 @@ model User {
   projectMemberships ProjectMembership[]
 }
 
+// TODO: Add new column for images
 model Task {
-  id                String            @id @default(cuid())
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  name              String
-  isCompleted       Boolean           @default(false)
-  importantPriority ImporatntPriority
-  reporter          String 
-  User              User              @relation(fields: [userId], references: [id])
-  userId            String
-  project           Project           @relation(fields: [projectId], references: [id])
-  projectId         String
-  isDone            Boolean?
-  totalSec          Int?              @default(0)
-  startWorkingOnTask Boolean?         @default(false)
+  id                 String            @id @default(cuid())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  description        String
+  name               String
+  isCompleted        Boolean           @default(false)
+  importantPriority  ImporatntPriority
+  reporter           String
+  User               User              @relation(fields: [userId], references: [id])
+  userId             String
+  project            Project           @relation(fields: [projectId], references: [id])
+  projectId          String
+  isDone             Boolean?
+  totalSec           Int?              @default(0)
+  startWorkingOnTask Boolean?          @default(false)
 }
+
 enum ImporatntPriority {
   Low
   Medium
