@@ -92,13 +92,13 @@ enum ImporatntPriority {
   Blocker
 }
 
+// Pomocná mapovacia tabuľka
 model ProjectMembership {
   userId    String
   projectId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Define foreign keys
   user    User    @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id])
 

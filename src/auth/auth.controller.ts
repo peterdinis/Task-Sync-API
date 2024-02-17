@@ -114,7 +114,7 @@ export class AuthController {
     })
     @ApiBearerAuth()
     @UseGuards(new JwtAuthGuard('jwt'))
-    @Get("/profile")
+    @Get('/profile')
     async getProfile(@Req() req: Request) {
         const userId = req.user['id'];
         const profile = await this.usersService.getProfile(userId);

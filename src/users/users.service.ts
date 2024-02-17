@@ -88,14 +88,15 @@ export class UsersService {
     async getProfile(id: string) {
         const userProfile = await this.findOne(id);
         const totalTaks = userProfile.Task.length;
-        const projectsThatIAmIn = await this.prismaService.projectMembership.findMany({
-            where: {
-                userId: id,
-            },
-            include: {
-                project: true,
-            },
-        });
+        const projectsThatIAmIn =
+            await this.prismaService.projectMembership.findMany({
+                where: {
+                    userId: id,
+                },
+                include: {
+                    project: true,
+                },
+            });
         const completedTasks = await this.prismaService.task.count({
             where: {
                 userId: id,
@@ -126,9 +127,9 @@ export class UsersService {
 
         const myReportedTasks = await this.prismaService.task.findMany({
             where: {
-                reporter: userProfile.email
-            }
-        })
+                reporter: userProfile.email,
+            },
+        });
 
         // eslint-disable-next-line @typescript-eslint/no-unsued-vars
         const { password, ...rest } = userProfile;
@@ -141,7 +142,7 @@ export class UsersService {
                 { label: 'Completed tasks', value: completedTasks },
                 { label: 'Today tasks', value: todayTasks },
                 { label: 'Week tasks', value: weekTasks },
-                { label: 'Reported tasks', value: myReportedTasks}
+                { label: 'Reported tasks', value: myReportedTasks },
             ],
         };
     }
