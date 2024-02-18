@@ -32,6 +32,7 @@ model Epic {
   project     Project  @relation(fields: [projectId], references: [id])
   isFinished  Boolean  @default(false)
   description String?
+  tasks       Task[]
 }
 
 model User {
@@ -66,6 +67,8 @@ model Task {
   totalSec           Int?              @default(0)
   startWorkingOnTask Boolean?          @default(false)
   infoImage          String?
+  epicId             String
+  epic               Epic         @relation(fields: [epicId], references: [id])
 }
 
 enum ImporatntPriority {

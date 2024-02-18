@@ -1,4 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ViewEpicsDto } from 'src/epic/dto/view-epics.dto';
+import { ViewTaskDto } from 'src/task/dto/view.task.dto';
+import { UserDto } from 'src/users/dto/user.dto';
 
 export class ViewProjectsDto {
     @ApiProperty()
@@ -16,5 +19,13 @@ export class ViewProjectsDto {
     @ApiProperty()
     projectName: string;
 
+    @ApiProperty()
+    tasks: ViewTaskDto;
+
+    @ApiProperty()
+    epic: ViewEpicsDto;
+
+    @ApiProperty()
+    membersList: UserDto; // TODO: Update userDto later
     // TODO: Later add more fileds
 }
