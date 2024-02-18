@@ -5,8 +5,8 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { ProjectModule } from 'src/project/project.module';
 
 @Module({
-  imports: [PrismaModule, ProjectModule],
-  controllers: [EpicController],
-  providers: [EpicService],
+    imports: [PrismaModule, ProjectModule],
+    controllers: [EpicController],
+    providers: [EpicService],
 })
 export class EpicModule {}

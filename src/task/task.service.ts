@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectService } from 'src/project/project.service';
 import { UpdateTaskDto } from './dto/update.task.dto';
@@ -10,7 +14,7 @@ export class TaskService {
     constructor(
         private readonly prismaService: PrismaService,
         private readonly projectService: ProjectService,
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService,
     ) {}
 
     async getAllTasks() {
@@ -85,11 +89,11 @@ export class TaskService {
     async sortedTasks() {
         const tasksSorted = await this.prismaService.task.findMany({
             orderBy: {
-                createdAt: Prisma.SortOrder.asc
-            }
-        })
+                createdAt: Prisma.SortOrder.asc,
+            },
+        });
 
-        if (!tasksSorted ) {
+        if (!tasksSorted) {
             throw new NotFoundException('No tasks found');
         }
 
@@ -98,18 +102,18 @@ export class TaskService {
 
     async findMyReportedTasks(userId: string) {
         const findExistingUserById = await this.usersService.findOne(userId);
-        if(!findExistingUserById) {
-            throw new NotFoundException("User not found")
+        if (!findExistingUserById) {
+            throw new NotFoundException('User not found');
         }
 
         const findAllMyReportedTasks = await this.prismaService.task.findMany({
             where: {
-                reporter: findExistingUserById.username
-            }
+                reporter: findExistingUserById.username,
+            },
         });
 
-        if(!findAllMyReportedTasks) {
-            throw new BadRequestException("User does not report any tasks");
+        if (!findAllMyReportedTasks) {
+            throw new BadRequestException('User does not report any tasks');
         }
 
         return findAllMyReportedTasks;
@@ -137,31 +141,31 @@ export class TaskService {
             where: {
                 name: {
                     contains: taskName,
-                    mode: "insensitive"
-                }
+                    mode: 'insensitive',
+                },
             },
 
             orderBy: {
-                createdAt: Prisma.SortOrder.asc
-            }
+                createdAt: Prisma.SortOrder.asc,
+            },
         });
 
-        if(!searchForTask) {
-            throw new NotFoundException("No task with this name was found");
+        if (!searchForTask) {
+            throw new NotFoundException('No task with this name was found');
         }
 
-        return searchForTask
+        return searchForTask;
     }
 
     async createNewTask(createTaskDto: any) {
         const newTask = await this.prismaService.task.create({
             data: {
-                ...createTaskDto
-            }
+                ...createTaskDto,
+            },
         });
 
-        if(!newTask) {
-            throw new BadRequestException("Failed to create new tasks");
+        if (!newTask) {
+            throw new BadRequestException('Failed to create new tasks');
         }
 
         return newTask;
@@ -172,15 +176,15 @@ export class TaskService {
 
         const updateTask = await this.prismaService.task.update({
             where: {
-                id: findOneTaskById.id
+                id: findOneTaskById.id,
             },
             data: {
-                ...updateTaskDto
-            }
-        })
+                ...updateTaskDto,
+            },
+        });
 
-        if(!updateTask) {
-            throw new BadRequestException("Could not update task");
+        if (!updateTask) {
+            throw new BadRequestException('Could not update task');
         }
 
         return updateTask;
@@ -191,9 +195,9 @@ export class TaskService {
 
         const deleteTask = await this.prismaService.task.delete({
             where: {
-                id: findOneTaskById.id
-            }
-        })
+                id: findOneTaskById.id,
+            },
+        });
 
         return deleteTask;
     }

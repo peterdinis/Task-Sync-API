@@ -19,7 +19,7 @@ import { EpicModule } from 'src/epic/epic.module';
             isGlobal: true,
         }),
         TaskModule,
-        EpicModule
+        EpicModule,
     ],
     controllers: [AppController],
     providers: [AppService],

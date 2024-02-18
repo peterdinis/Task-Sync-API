@@ -1,6 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    Query,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { ViewTaskDto } from './dto/view.task.dto';
 import { CreateTaskDto } from './dto/create.task.dto';
 import { UpdateTaskDto } from './dto/update.task.dto';
@@ -48,95 +62,98 @@ export class TaskController {
     }
 
     @ApiOperation({
-        summary: "Return all completed tasks"
+        summary: 'Return all completed tasks',
     })
     @ApiOkResponse({
         status: 200,
     })
-    @Get("/completed")
+    @Get('/completed')
     async returnAllCompletedTasks() {
         return this.taskService.findAllCompletedTasks();
     }
 
     @ApiOperation({
-        summary: "Find all non completed tasks"
+        summary: 'Find all non completed tasks',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Get("/noncompleted")
+    @Get('/noncompleted')
     async returnAllNonCompletedTasks() {
         return this.taskService.findNonCompletedTasks();
     }
 
     @ApiOperation({
-        summary: "Find all sorted tasks"
+        summary: 'Find all sorted tasks',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Get("/sorted")
+    @Get('/sorted')
     async allSortedTasks() {
         return this.taskService.sortedTasks();
     }
 
     @ApiOperation({
-        summary: "Create new task"
+        summary: 'Create new task',
     })
     @ApiCreatedResponse({
         status: 201,
-        type: CreateTaskDto
+        type: CreateTaskDto,
     })
-    @Post("/create")
+    @Post('/create')
     async createNewTask(@Body() createTaskDto: any) {
         return this.taskService.createNewTask(createTaskDto);
     }
 
     @ApiOperation({
-        summary: "Update task"
+        summary: 'Update task',
     })
     @ApiOkResponse({
         status: 200,
-        type: UpdateTaskDto
+        type: UpdateTaskDto,
     })
-    @Put("/:id/update")
-    async updateTask(@Param("id") id: string, @Body() updateTaskDto: UpdateTaskDto) {
+    @Put('/:id/update')
+    async updateTask(
+        @Param('id') id: string,
+        @Body() updateTaskDto: UpdateTaskDto,
+    ) {
         return this.taskService.updateTask(id, updateTaskDto);
     }
 
     @ApiOperation({
-        summary: "Delete task"
+        summary: 'Delete task',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Delete("/:id/delete")
-    async deleteTask(@Param("id") id: string) {
+    @Delete('/:id/delete')
+    async deleteTask(@Param('id') id: string) {
         return this.taskService.deleteTask(id);
     }
 
     @ApiOperation({
-        summary: "Paginated tasks"
+        summary: 'Paginated tasks',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Get("/paginate")
+    @Get('/paginate')
     async paginatedTasks(
-        @Query("page") page: number,
-        @Query("pageSize") pageSize: number
+        @Query('page') page: number,
+        @Query('pageSize') pageSize: number,
     ) {
         return this.taskService.paginatedTasks(page, pageSize);
     }
 
     @ApiOperation({
-        summary: "Search for project by name"
+        summary: 'Search for project by name',
     })
     @ApiOkResponse({
-        status: 200
+        status: 200,
     })
-    @Get("/search")
-    async searchForTaskByName(@Query("name") name: string) {
+    @Get('/search')
+    async searchForTaskByName(@Query('name') name: string) {
         return this.taskService.searchTaskByName(name);
     }
 }
