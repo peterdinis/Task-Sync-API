@@ -1,5 +1,5 @@
 import { PrismaService } from './../prisma/prisma.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProjectService } from 'src/project/project.service';
 
 @Injectable()
@@ -26,5 +26,38 @@ export class EpicService {
         }
 
         return findEpicById;
+    }
+
+    async getAllEpicsForProject(projectId: string) {
+        const findAllEpicsForProject = await this.prismaService.epic.findMany({
+            where: {
+                projectId
+            }
+        })
+
+        if(!findAllEpicsForProject) {
+            throw new NotFoundException("Specific project has no created epic")
+        }
+
+        return findAllEpicsForProject
+    }
+
+    async epicDetailInSpecificProject(projectId: string, epicId: string) {
+        const findEpicDetailInProject = await this.prismaService.epic.findFirst({
+            where: {
+                id: epicId,
+                projectId
+            }
+        })
+
+        if(!findEpicDetailInProject) {
+            throw new BadRequestException("Epic with this id does not exists in speific project. Check project or epic id");
+        }
+    }
+
+    async createNewEpic() {}
+
+    async updateEpic() {
+        
     }
 }

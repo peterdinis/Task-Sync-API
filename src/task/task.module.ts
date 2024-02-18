@@ -9,5 +9,6 @@ import { UsersModule } from 'src/users/users.module';
     imports: [PrismaModule, ProjectModule, UsersModule],
     controllers: [TaskController],
     providers: [TaskService],
+    exports: [TaskService]
 })
 export class TaskModule {}
