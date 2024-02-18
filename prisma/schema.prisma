@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
+  provider        = "prisma-client-js"
+  output          = "../node_modules/.prisma/client"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
@@ -20,13 +20,18 @@ model Project {
   ownerUsername      String
   projectMemberships ProjectMembership[]
   tasks              Task[]
+  epic               Epic[]
 }
 
 model Epic {
-  id                 String              @id @default(cuid())
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  name               String              @default("Epic name")
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @default("Epic name")
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  isFinished Boolean @default(false)
+  description String?
 }
 
 model User {
@@ -60,7 +65,7 @@ model Task {
   isDone             Boolean?
   totalSec           Int?              @default(0)
   startWorkingOnTask Boolean?          @default(false)
-  infoImage          String?        
+  infoImage          String?
 }
 
 enum ImporatntPriority {
