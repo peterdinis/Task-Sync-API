@@ -7,6 +7,7 @@ import { UsersModule } from 'src/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TaskModule } from 'src/task/task.module';
 import { ProjectModule } from 'src/project/project.module';
+import { EpicModule } from 'src/epic/epic.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { ProjectModule } from 'src/project/project.module';
             isGlobal: true,
         }),
         TaskModule,
+        EpicModule
     ],
     controllers: [AppController],
     providers: [AppService],
