@@ -102,7 +102,7 @@ export class TaskController {
         type: CreateTaskDto,
     })
     @Post('/create')
-    async createNewTask(@Body() createTaskDto: any) {
+    async createNewTask(@Body() createTaskDto: CreateTaskDto) {
         return this.taskService.createNewTask(createTaskDto);
     }
 
