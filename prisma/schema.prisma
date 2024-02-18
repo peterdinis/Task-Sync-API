@@ -42,10 +42,7 @@ model User {
   username           String
   email              String
   password           String
-  breakCount         Int?
-  workCount          Int?
-  intervalBreaks     Int?
-  Task               Task[]
+  tasks              Task[]
   projectsList       Project[]           @relation("ProjectMembers")
   projectMemberships ProjectMembership[]
 }
@@ -69,6 +66,7 @@ model Task {
   infoImage          String?
   epicId             String
   epic               Epic         @relation(fields: [epicId], references: [id])
+  isForEpic          Boolean
 }
 
 enum ImporatntPriority {
