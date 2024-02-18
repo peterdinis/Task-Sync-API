@@ -1,31 +1,10 @@
 import {
     IsEmail,
     IsNotEmpty,
-    IsNumber,
     IsOptional,
     IsString,
-    Max,
-    Min,
     MinLength,
 } from 'class-validator';
-
-export class TaskTimerDto {
-    @IsOptional()
-    @IsNumber()
-    @Min(1)
-    workInterval?: number;
-
-    @IsOptional()
-    @IsNumber()
-    @Min(1)
-    breakInterval?: number;
-
-    @IsOptional()
-    @IsNumber()
-    @Min(1)
-    @Max(20)
-    intervalsCount?: number;
-}
 
 export class UserDto {
     @IsEmail()
