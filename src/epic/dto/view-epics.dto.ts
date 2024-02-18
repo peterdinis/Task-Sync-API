@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ViewProjectsDto } from 'src/project/dto/view-projects.dto';
+import { ViewTaskDto } from 'src/task/dto/view.task.dto';
 
 export class ViewEpicsDto {
     @ApiProperty()
@@ -16,4 +17,7 @@ export class ViewEpicsDto {
 
     @ApiProperty()
     description: string;
+
+    @ApiProperty()
+    tasks: ViewTaskDto;
 }

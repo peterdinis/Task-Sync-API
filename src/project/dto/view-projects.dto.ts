@@ -26,6 +26,5 @@ export class ViewProjectsDto {
     epic: ViewEpicsDto;
 
     @ApiProperty()
-    membersList: UserDto; // TODO: Update userDto later
-    // TODO: Later add more fileds
+    membersList: UserDto;
 }

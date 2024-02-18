@@ -55,7 +55,7 @@ export class UsersService {
                 id,
             },
             include: {
-                Task: true,
+                tasks: true,
             },
         });
 
@@ -72,7 +72,7 @@ export class UsersService {
                 email,
             },
             include: {
-                Task: true,
+                tasks: true,
             },
         });
 
@@ -87,7 +87,7 @@ export class UsersService {
 
     async getProfile(id: string) {
         const userProfile = await this.findOne(id);
-        const totalTaks = userProfile.Task.length;
+        const totalTaks = userProfile.tasks.length;
         const projectsThatIAmIn =
             await this.prismaService.projectMembership.findMany({
                 where: {
