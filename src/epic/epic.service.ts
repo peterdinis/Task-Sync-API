@@ -1,5 +1,5 @@
 import { PrismaService } from './../prisma/prisma.service';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProjectService } from 'src/project/project.service';
 import { UpdateEpicDto } from './dto/update-epic.dto';
 import { CreateEpicDto } from './dto/create-epic.dto';
@@ -58,10 +58,35 @@ export class EpicService {
     }
 
     async createNewEpic(epicDto: CreateEpicDto) {
-        
+        const newEpic = await this.prismaService.epic.create({
+            data: {
+                ...epicDto
+            }
+        });
+
+        if(!newEpic) {
+            throw new BadRequestException("Create epic failed");
+        }
+
+        return newEpic;
     }
 
     async updateEpic(epicId: string, epicUpdateDto: UpdateEpicDto) {
-        
+        const findEpicById = await this.getEpicById(epicId);
+
+        const updateEpicById = await this.prismaService.epic.update({
+            where: {
+                id: findEpicById.id
+            },
+            data: {
+                ...epicUpdateDto
+            }
+        });
+
+        if(!updateEpicById) {
+            throw new ForbiddenException("Update failed");
+        }
+
+        return updateEpicById;
     }
 }
