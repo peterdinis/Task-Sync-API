@@ -84,4 +84,18 @@ export class EpicController {
     ) {
         return this.epicService.updateEpic(epicId, updateEpicDto);
     }
+
+    @ApiOperation({
+        summary: "Finish epic"
+    })
+    @ApiOkResponse({
+        status: 200,
+        type: UpdateEpicDto
+    })
+    @Put("/:epicId/finish")
+    async finishEpic(
+        @Param("epicId") epicId: string,
+    ) {
+        return this.epicService.finishEpic(epicId);
+    }
 }

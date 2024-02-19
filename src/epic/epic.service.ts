@@ -89,4 +89,25 @@ export class EpicService {
 
         return updateEpicById;
     }
+
+    async finishEpic(epicId: string) {
+        const findEpicById = await this.getEpicById(epicId);
+
+        const finishOneEpic = await this.prismaService.epic.update({
+            where: {
+                id: findEpicById.id
+            },
+            data: {
+                isFinished: true
+            }
+        });
+
+        if(!finishOneEpic) {
+            throw new ForbiddenException("Update failed");
+        }
+
+        return finishOneEpic;
+    }
+
+    
 }
