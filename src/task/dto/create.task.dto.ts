@@ -54,11 +54,6 @@ export class CreateTaskDto {
     @ApiProperty()
     projectId: string;
 
-    @IsBoolean()
-    @IsNotEmpty()
-    @ApiProperty()
-    isDone: boolean;
-
     @IsString()
     @IsNotEmpty()
     @ApiProperty()

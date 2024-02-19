@@ -32,9 +32,6 @@ export class ViewTaskDto {
     user: User;
 
     @ApiProperty()
-    isDone: boolean;
-
-    @ApiProperty()
     totalSec: number;
 
     @ApiProperty()
