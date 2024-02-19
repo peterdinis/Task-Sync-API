@@ -60,7 +60,6 @@ model Task {
   userId             String
   project            Project           @relation(fields: [projectId], references: [id])
   projectId          String
-  isDone             Boolean?
   totalSec           Int?              @default(0)
   startWorkingOnTask Boolean?          @default(false)
   infoImage          String?
