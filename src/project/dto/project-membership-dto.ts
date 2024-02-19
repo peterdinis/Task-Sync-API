@@ -5,10 +5,9 @@ import { UserDto } from 'src/users/dto/user.dto';
 export class ProjectMembershipDto {
     @IsArray()
     @IsNotEmpty()
-    
     project: ViewProjectsDto;
 
     @IsArray()
     @IsNotEmpty()
-    user: UserDto
+    user: UserDto;
 }

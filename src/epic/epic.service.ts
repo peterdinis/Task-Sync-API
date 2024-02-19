@@ -1,5 +1,10 @@
 import { PrismaService } from './../prisma/prisma.service';
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { ProjectService } from 'src/project/project.service';
 import { UpdateEpicDto } from './dto/update-epic.dto';
 import { CreateEpicDto } from './dto/create-epic.dto';
@@ -33,39 +38,43 @@ export class EpicService {
     async getAllEpicsForProject(projectId: string) {
         const findAllEpicsForProject = await this.prismaService.epic.findMany({
             where: {
-                projectId
-            }
-        })
+                projectId,
+            },
+        });
 
-        if(!findAllEpicsForProject) {
-            throw new NotFoundException("Specific project has no created epic")
+        if (!findAllEpicsForProject) {
+            throw new NotFoundException('Specific project has no created epic');
         }
 
-        return findAllEpicsForProject
+        return findAllEpicsForProject;
     }
 
     async epicDetailInSpecificProject(projectId: string, epicId: string) {
-        const findEpicDetailInProject = await this.prismaService.epic.findFirst({
-            where: {
-                id: epicId,
-                projectId
-            }
-        })
+        const findEpicDetailInProject = await this.prismaService.epic.findFirst(
+            {
+                where: {
+                    id: epicId,
+                    projectId,
+                },
+            },
+        );
 
-        if(!findEpicDetailInProject) {
-            throw new BadRequestException("Epic with this id does not exists in speific project. Check project or epic id");
+        if (!findEpicDetailInProject) {
+            throw new BadRequestException(
+                'Epic with this id does not exists in speific project. Check project or epic id',
+            );
         }
     }
 
     async createNewEpic(epicDto: CreateEpicDto) {
         const newEpic = await this.prismaService.epic.create({
             data: {
-                ...epicDto
-            }
+                ...epicDto,
+            },
         });
 
-        if(!newEpic) {
-            throw new BadRequestException("Create epic failed");
+        if (!newEpic) {
+            throw new BadRequestException('Create epic failed');
         }
 
         return newEpic;
@@ -76,15 +85,15 @@ export class EpicService {
 
         const updateEpicById = await this.prismaService.epic.update({
             where: {
-                id: findEpicById.id
+                id: findEpicById.id,
             },
             data: {
-                ...epicUpdateDto
-            }
+                ...epicUpdateDto,
+            },
         });
 
-        if(!updateEpicById) {
-            throw new ForbiddenException("Update failed");
+        if (!updateEpicById) {
+            throw new ForbiddenException('Update failed');
         }
 
         return updateEpicById;
@@ -95,19 +104,33 @@ export class EpicService {
 
         const finishOneEpic = await this.prismaService.epic.update({
             where: {
-                id: findEpicById.id
+                id: findEpicById.id,
             },
             data: {
-                isFinished: true
-            }
+                isFinished: true,
+            },
         });
 
-        if(!finishOneEpic) {
-            throw new ForbiddenException("Update failed");
+        if (!finishOneEpic) {
+            throw new ForbiddenException('Update failed');
         }
 
         return finishOneEpic;
     }
 
-    
+    async deleteEpic(epicId: string) {
+        const findEpicById = await this.getEpicById(epicId);
+
+        const deleteEpicById = await this.prismaService.epic.delete({
+            where: {
+                id: findEpicById.id,
+            },
+        });
+
+        if (!deleteEpicById) {
+            throw new ForbiddenException('Delete epic failed');
+        }
+
+        return deleteEpicById;
+    }
 }
