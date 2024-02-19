@@ -1,6 +1,8 @@
 import { PrismaService } from './../prisma/prisma.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProjectService } from 'src/project/project.service';
+import { UpdateEpicDto } from './dto/update-epic.dto';
+import { CreateEpicDto } from './dto/create-epic.dto';
 
 @Injectable()
 export class EpicService {
@@ -55,9 +57,11 @@ export class EpicService {
         }
     }
 
-    async createNewEpic() {}
+    async createNewEpic(epicDto: CreateEpicDto) {
+        
+    }
 
-    async updateEpic() {
+    async updateEpic(epicId: string, epicUpdateDto: UpdateEpicDto) {
         
     }
 }
