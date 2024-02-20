@@ -35,7 +35,6 @@ export class CreateTaskDto {
 
     @IsEnum(ImporatntPriority)
     @IsOptional()
-    @ApiProperty()
     @Transform(({ value }) => ('' + value).toLowerCase())
     imporatntPriority?: ImporatntPriority;
 
