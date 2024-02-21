@@ -12,14 +12,12 @@ import { EpicModule } from 'src/epic/epic.module';
 @Module({
     imports: [
         PrismaModule,
-        AuthModule,
-        UsersModule,
-        ProjectModule,
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        TaskModule,
-        EpicModule,
+        AuthModule,
+        UsersModule,
+        EpicModule
     ],
     controllers: [AppController],
     providers: [AppService],
