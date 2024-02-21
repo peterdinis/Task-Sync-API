@@ -19,7 +19,7 @@ import { EpicModule } from 'src/epic/epic.module';
         UsersModule,
         EpicModule,
         TaskModule,
-        ProjectModule
+        ProjectModule,
     ],
     controllers: [AppController],
     providers: [AppService],
