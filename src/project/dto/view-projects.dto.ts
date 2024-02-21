@@ -22,7 +22,7 @@ export class ViewProjectsDto {
     @ApiProperty()
     tasks: ViewTaskDto;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => ViewEpicsDto })
     epic: ViewEpicsDto;
 
     @ApiProperty()

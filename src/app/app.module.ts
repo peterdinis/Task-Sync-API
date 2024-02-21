@@ -17,7 +17,9 @@ import { EpicModule } from 'src/epic/epic.module';
         }),
         AuthModule,
         UsersModule,
-        EpicModule
+        EpicModule,
+        TaskModule,
+        ProjectModule,
     ],
     controllers: [AppController],
     providers: [AppService],

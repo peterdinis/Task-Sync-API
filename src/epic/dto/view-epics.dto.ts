@@ -9,7 +9,7 @@ export class ViewEpicsDto {
     @ApiProperty()
     name: string;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => ViewProjectsDto })
     project: ViewProjectsDto;
 
     @ApiProperty()
