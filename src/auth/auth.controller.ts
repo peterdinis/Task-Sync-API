@@ -2,7 +2,10 @@ import {
     Body,
     Controller,
     Get,
+    Param,
+    ParseBoolPipe,
     Post,
+    Put,
     Req,
     Res,
     UnauthorizedException,
@@ -23,6 +26,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { UsersService } from 'src/users/users.service';
+import { UpdateUserDto } from './dto/update.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -119,5 +123,20 @@ export class AuthController {
         const userId = req.user['id'];
         const profile = await this.usersService.getProfile(userId);
         return profile;
+    }
+
+    @ApiOperation({
+        summary: 'Update user profile',
+    })
+    @ApiOkResponse({
+        status: 200,
+        type: UpdateUserDto,
+    })
+    @Put('/:profileId/update')
+    async updateProfile(
+        @Param('projectId') projectId: string,
+        @Body() updateUserDto: UpdateUserDto,
+    ) {
+        return this.authService.updateUser(projectId, updateUserDto);
     }
 }

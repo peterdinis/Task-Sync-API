@@ -9,6 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { verify } from 'argon2';
 import { Response } from 'express';
+import { UpdateUserDto } from './dto/update.dto';
 
 @Injectable()
 export class AuthService {
@@ -117,5 +118,11 @@ export class AuthService {
             domain: 'localhost',
             sameSite: 'none',
         });
+    }
+
+    async updateUser(id: string, updateUserDto: UpdateUserDto) {
+        const findOneUser = this.userService.findOne(id);
+        const updateOneUser = this.userService.updateUser(id, updateUserDto);
+        return updateOneUser;
     }
 }
