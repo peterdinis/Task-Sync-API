@@ -10,7 +10,7 @@ export class ViewEpicsDto {
     name: string;
 
     @ApiProperty()
-    project: ViewProjectsDto;
+    project: any;
 
     @ApiProperty()
     isFinished: boolean;
