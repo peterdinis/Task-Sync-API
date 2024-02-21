@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { hash } from 'argon2';
 import { startOfDay, subDays } from 'date-fns';
 
 @Injectable()
@@ -15,8 +14,9 @@ export class UsersService {
     async createUser(registerDto: RegisterDto) {
         const newUser = await this.prismaService.user.create({
             data: {
-                ...registerDto,
-                password: hash(registerDto.password) as unknown as string,
+                email: registerDto.email,
+                username: registerDto.username,
+                password: registerDto.password
             },
         });
 
@@ -76,7 +76,7 @@ export class UsersService {
             },
         });
 
-        if (!findUserByEmail) {
+        if (findUserByEmail) {
             throw new NotFoundException(
                 'Requested user with this email does not exists',
             );
