@@ -9,8 +9,8 @@ export class ViewEpicsDto {
     @ApiProperty()
     name: string;
 
-    @ApiProperty()
-    project: any;
+    @ApiProperty({ type: () => ViewProjectsDto })
+    project: ViewProjectsDto;
 
     @ApiProperty()
     isFinished: boolean;

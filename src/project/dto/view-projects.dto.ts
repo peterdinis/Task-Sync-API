@@ -22,8 +22,8 @@ export class ViewProjectsDto {
     @ApiProperty()
     tasks: ViewTaskDto;
 
-    @ApiProperty()
-    epic: ViewEpicsDto;
+    @ApiProperty({ type: () => ViewEpicsDto })
+epic: ViewEpicsDto;
 
     @ApiProperty()
     membersList: UserDto;
