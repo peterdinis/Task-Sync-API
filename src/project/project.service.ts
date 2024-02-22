@@ -8,7 +8,7 @@ import {
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as argon2 from 'argon2';
+import {compare} from "bcrypt";
 import { Prisma } from '@prisma/client';
 import { AddMemberToProjectDto } from './dto/add-member-to-project-dto';
 import { DeleteMemberFromProjectDto } from './dto/delete-member-from-project.dto';
@@ -105,7 +105,7 @@ export class ProjectService {
         const findProjectInfo = await this.findProjectById(projectId);
 
         if (
-            !(await argon2.verify(
+            !(await compare(
                 findProjectInfo.ownerUsername,
                 projectDto.ownerUsername,
             ))
@@ -133,7 +133,7 @@ export class ProjectService {
         const findProjectInfo = await this.findProjectById(projectId);
 
         if (
-            !(await argon2.verify(findProjectInfo.ownerUsername, ownerUsername))
+            !(await compare(findProjectInfo.ownerUsername, ownerUsername))
         ) {
             throw new ConflictException(
                 'You can not delete project because you are not the owner',

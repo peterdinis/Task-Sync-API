@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { verify } from 'argon2';
+import {compare} from "bcrypt";
 import { Response } from 'express';
 import { UpdateUserDto } from './dto/update.dto';
 
@@ -77,7 +77,7 @@ export class AuthService {
 
     private async validateUser(dto: RegisterDto) {
         const user = await this.userService.findOneByEmail(dto.email);
-        const isValid = await verify(user.password, dto.password);
+        const isValid = await compare(user.password, dto.password);
 
         if (!isValid) throw new UnauthorizedException('Invalid password');
 

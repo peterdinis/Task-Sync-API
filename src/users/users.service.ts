@@ -6,6 +6,7 @@ import {
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { startOfDay, subDays } from 'date-fns';
+import {hash} from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,7 @@ export class UsersService {
             data: {
                 email: registerDto.email,
                 username: registerDto.username,
-                password: registerDto.password
+                password: hash(registerDto.password, 12)
             },
         });
 
