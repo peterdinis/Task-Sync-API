@@ -37,6 +37,17 @@ export class AuthController {
     ) {}
 
     @ApiOperation({
+        summary: "Return all users"
+    })
+    @ApiOkResponse({
+        status: 200
+    })
+    @Get("/users")
+    async allUsers() {
+        return this.usersService.findAllUsers();
+    }
+
+    @ApiOperation({
         summary: 'Login user',
     })
     @ApiCreatedResponse({

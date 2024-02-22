@@ -11,6 +11,11 @@ import { startOfDay, subDays } from 'date-fns';
 export class UsersService {
     constructor(private readonly prismaService: PrismaService) {}
 
+    async findAllUsers() {
+        const getAllUsers = await this.prismaService.user.findMany();
+        return getAllUsers;
+    }
+
     async createUser(registerDto: RegisterDto) {
         const newUser = await this.prismaService.user.create({
             data: {
@@ -76,7 +81,7 @@ export class UsersService {
             },
         });
 
-        if (findUserByEmail) {
+        if (!findUserByEmail) {
             throw new NotFoundException(
                 'Requested user with this email does not exists',
             );
