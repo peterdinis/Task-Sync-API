@@ -1,6 +1,7 @@
 import {
     BadRequestException,
     Injectable,
+    NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -77,6 +78,9 @@ export class AuthService {
 
     private async validateUser(dto: RegisterDto) {
         const user = await this.userService.findOneByEmail(dto.email);
+        if(!user) {
+            throw new NotFoundException("User not found with this email");
+        }
         const isValid = await compare(user.password, dto.password);
 
         if (!isValid) throw new UnauthorizedException('Invalid password');
@@ -122,6 +126,9 @@ export class AuthService {
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
         const findOneUser = this.userService.findOne(id);
+        if(!findOneUser) {
+            throw new NotFoundException("User not found with this id");
+        }
         const updateOneUser = this.userService.updateUser(id, updateUserDto);
         return updateOneUser;
     }

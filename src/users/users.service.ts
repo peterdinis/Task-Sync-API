@@ -1,7 +1,6 @@
 import {
     BadRequestException,
     Injectable,
-    NotFoundException,
 } from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -65,10 +64,6 @@ export class UsersService {
                 tasks: true,
             },
         });
-
-        if (!findOneUser) {
-            throw new NotFoundException('User Not found');
-        }
 
         return findOneUser;
     }
