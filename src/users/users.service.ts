@@ -18,11 +18,12 @@ export class UsersService {
     }
 
     async createUser(registerDto: RegisterDto) {
+        const hashedPassword = await hash(registerDto.password, 12);
         const newUser = await this.prismaService.user.create({
             data: {
                 email: registerDto.email,
                 username: registerDto.username,
-                password: registerDto.password
+                password: hashedPassword
             },
         });
 
@@ -81,12 +82,6 @@ export class UsersService {
                 tasks: true,
             },
         });
-
-        if (!findUserByEmail) {
-            throw new NotFoundException(
-                'Requested user with this email does not exists',
-            );
-        }
 
         return findUserByEmail;
     }
