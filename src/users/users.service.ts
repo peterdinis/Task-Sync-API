@@ -22,7 +22,7 @@ export class UsersService {
             data: {
                 email: registerDto.email,
                 username: registerDto.username,
-                password: hash(registerDto.password, 12)
+                password: registerDto.password
             },
         });
 
@@ -82,7 +82,7 @@ export class UsersService {
             },
         });
 
-        if (findUserByEmail) {
+        if (!findUserByEmail) {
             throw new NotFoundException(
                 'Requested user with this email does not exists',
             );
