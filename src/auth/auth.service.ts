@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import {compare} from "bcrypt";
 import { Response } from 'express';
 import { UpdateUserDto } from './dto/update.dto';
 
@@ -81,9 +80,8 @@ export class AuthService {
         if(!user) {
             throw new NotFoundException("User not found with this email");
         }
-        const isValid = await compare(user.password, dto.password);
 
-        if (!isValid) throw new UnauthorizedException('Invalid password');
+        if (user.password !== dto.password) throw new UnauthorizedException('Invalid password');
 
         return user;
     }
