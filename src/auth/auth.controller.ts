@@ -12,7 +12,6 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 import {
-    ApiBearerAuth,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -116,20 +115,6 @@ export class AuthController {
     async logoutUser(@Res({ passthrough: true }) res: Response) {
         this.authService.refreshTokenRemoveToResponse(res);
         return true;
-    }
-
-    @ApiOperation({
-        summary: 'Get user profile',
-    })
-    @ApiOkResponse({
-        status: 200,
-    })
-    @ApiBearerAuth()
-    @Get('/profile')
-    async getProfile(@Req() req: Request) {
-        const userId = req.user['id'];
-        const profile = await this.usersService.getProfile(userId);
-        return profile;
     }
 
     @ApiOperation({
