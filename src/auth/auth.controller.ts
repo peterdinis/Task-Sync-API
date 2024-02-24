@@ -3,18 +3,15 @@ import {
     Controller,
     Get,
     Param,
-    ParseBoolPipe,
     Post,
     Put,
     Req,
     Res,
     UnauthorizedException,
-    UseGuards,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
 import {
-    ApiBearerAuth,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -24,7 +21,6 @@ import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { JwtAuthGuard } from './guards/jwt.guard';
 import { UsersService } from 'src/users/users.service';
 import { UpdateUserDto } from './dto/update.dto';
 
@@ -119,21 +115,6 @@ export class AuthController {
     async logoutUser(@Res({ passthrough: true }) res: Response) {
         this.authService.refreshTokenRemoveToResponse(res);
         return true;
-    }
-
-    @ApiOperation({
-        summary: 'Get user profile',
-    })
-    @ApiOkResponse({
-        status: 200,
-    })
-    @ApiBearerAuth()
-    @UseGuards(new JwtAuthGuard('jwt'))
-    @Get('/profile')
-    async getProfile(@Req() req: Request) {
-        const userId = req.user['id'];
-        const profile = await this.usersService.getProfile(userId);
-        return profile;
     }
 
     @ApiOperation({
